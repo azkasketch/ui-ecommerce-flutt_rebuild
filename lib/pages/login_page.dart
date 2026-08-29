@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../theme.dart';
+
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -9,138 +11,191 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  bool _obscurePassword = true;
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  void _continue() {
+    if (_formKey.currentState!.validate()) {
+      Navigator.pushReplacementNamed(context, '/');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _buildHeader(),
-                const SizedBox(height: 40.0),
-                _buildEmailField(),
-                const SizedBox(height: 20.0),
-                _buildPasswordField(),
-                const SizedBox(height: 30.0),
-                _buildLoginButton(context),
-                const SizedBox(height: 20.0),
-                _buildSignUpLink(context),
-              ]
-            )
-          )
-        )
+      body: Stack(
+        children: [
+          Positioned(
+            top: -90,
+            right: -65,
+            child: _glow(220, lavender.withValues(alpha: .3)),
+          ),
+          Positioned(
+            bottom: -120,
+            left: -75,
+            child: _glow(250, coral.withValues(alpha: .18)),
+          ),
+          SafeArea(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.fromLTRB(24, 28, 24, 24),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _brandMark(),
+                    const SizedBox(height: 74),
+                    const Text(
+                      'Good to see you.',
+                      style: TextStyle(
+                        fontSize: 36,
+                        height: 1.05,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: -1.2,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    const Text(
+                      'Sign in to pick up where you left off.',
+                      style: TextStyle(color: muted, fontSize: 16),
+                    ),
+                    const SizedBox(height: 38),
+                    TextFormField(
+                      controller: _emailController,
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: const InputDecoration(
+                        labelText: 'Email address',
+                        prefixIcon: Icon(Icons.mail_outline_rounded),
+                      ),
+                      validator: (value) {
+                        if (value == null || !value.contains('@')) {
+                          return 'Enter a valid email address';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 14),
+                    TextFormField(
+                      controller: _passwordController,
+                      obscureText: _obscurePassword,
+                      decoration: InputDecoration(
+                        labelText: 'Password',
+                        prefixIcon: const Icon(Icons.lock_outline_rounded),
+                        suffixIcon: IconButton(
+                          onPressed: () => setState(
+                            () => _obscurePassword = !_obscurePassword,
+                          ),
+                          icon: Icon(
+                            _obscurePassword
+                                ? Icons.visibility_outlined
+                                : Icons.visibility_off_outlined,
+                          ),
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.length < 6) {
+                          return 'Use at least 6 characters';
+                        }
+                        return null;
+                      },
+                    ),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: TextButton(
+                        onPressed: () {},
+                        child: const Text(
+                          'Forgot password?',
+                          style: TextStyle(color: mint),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 18),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 56,
+                      child: FilledButton(
+                        onPressed: _continue,
+                        style: FilledButton.styleFrom(
+                          backgroundColor: coral,
+                          foregroundColor: ink,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18),
+                          ),
+                        ),
+                        child: const Text(
+                          'Continue',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w800,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 26),
+                    Center(
+                      child: TextButton(
+                        onPressed: () => Navigator.pushReplacementNamed(
+                          context,
+                          '/',
+                        ),
+                        child: const Text(
+                          'New here? Create an account',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
 
-  Widget _buildHeader() {
-    return Column(
+  Widget _glow(double size, Color color) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: color,
+        boxShadow: [BoxShadow(color: color, blurRadius: 100)],
+      ),
+    );
+  }
+
+  Widget _brandMark() {
+    return Row(
       children: [
-        const Text(
-          'Welcome Back!',
-          style: TextStyle(
-            fontSize: 32.0,
-            fontWeight: FontWeight.bold,
-            color: Color(0xFF4C53A5),
+        Container(
+          width: 38,
+          height: 38,
+          decoration: BoxDecoration(
+            color: coral,
+            borderRadius: BorderRadius.circular(13),
           ),
+          child: const Icon(Icons.auto_awesome, color: ink, size: 21),
         ),
-        const SizedBox(height: 10.0),
+        const SizedBox(width: 12),
         const Text(
-          'Please sign in to continue',
+          'VANTA',
           style: TextStyle(
-            fontSize: 18.0,
-            color: Color(0xFF4C53A5),
+            fontSize: 18,
+            fontWeight: FontWeight.w800,
+            letterSpacing: 4,
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildEmailField() {
-    return TextFormField(
-      controller: _emailController,
-      decoration: const InputDecoration(
-        labelText: 'Email',
-        prefixIcon: Icon(Icons.email, color: Colors.blue),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-        ),
-      ),
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'Please enter your email';
-        }
-        if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-          return 'Please enter a valid email address';
-        }
-        // Add more email validation logic if needed
-        return null;
-      },
-      keyboardType: TextInputType.emailAddress,
-    );
-  }
-
-  Widget _buildPasswordField() {
-    return TextFormField(
-      controller: _passwordController,
-      decoration: const InputDecoration(
-        labelText: 'Password',
-        prefixIcon: const Icon(Icons.lock, color: Color(0xFF4C53A5)),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-        ),
-      ),
-      obscureText: true,
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'Please enter your password';
-        }
-        if (value.length < 6) {
-          return 'Password must be at least 6 characters long';
-        }
-        // Add more password validation logic if needed
-        return null;
-      },
-    );
-  }
-
-  Widget _buildLoginButton(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () {
-        if (_formKey.currentState!.validate()) {
-          Navigator.pushReplacementNamed(context, 'AccountPage');
-        }
-      },
-      style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(0xFF4C53A5),
-        padding: const EdgeInsets.symmetric(horizontal: 80.0, vertical: 15.0),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-      ),
-      child: const Text(
-        'Login',
-        style: TextStyle(fontSize: 18.0, color: Colors.white),
-      ),
-    );
-  }
-
-  Widget _buildSignUpLink(BuildContext context) {
-    return TextButton(
-      onPressed: () {
-        Navigator.pushNamed(context, '/');
-      },
-      child: const Text(
-        'Don\'t have an account? Sign Up',
-        style: TextStyle(color: Color(0xFF4C53A5)),
-      ),
     );
   }
 }

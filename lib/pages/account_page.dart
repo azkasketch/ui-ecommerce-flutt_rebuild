@@ -1,185 +1,187 @@
 import 'package:flutter/material.dart';
 
+import '../theme.dart';
+
 class AccountPage extends StatelessWidget {
   const AccountPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Account', style: TextStyle(fontWeight: FontWeight.bold)),
-        backgroundColor: const Color(0xFF4C53A5),
-        foregroundColor: Colors.white,
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 20.0),
-            _buildProfileSection(),
-            const SizedBox(height: 30.0),
-            _buildSettingsSection(context),
-          ],
-        ),
+    return SafeArea(
+      bottom: false,
+      child: ListView(
+        padding: const EdgeInsets.fromLTRB(20, 18, 20, 100),
+        children: [
+          Row(
+            children: [
+              const Text(
+                'Profile',
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: -.8,
+                ),
+              ),
+              const Spacer(),
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.settings_outlined),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          _profileCard(),
+          const SizedBox(height: 25),
+          const Text(
+            'Your space',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+          ),
+          const SizedBox(height: 12),
+          _settingItem(
+            icon: Icons.shopping_bag_outlined,
+            title: 'Orders',
+            subtitle: 'Track and manage your purchases',
+            onTap: () => _showMessage(context, 'Your orders are up to date'),
+          ),
+          _settingItem(
+            icon: Icons.favorite_border_rounded,
+            title: 'Saved items',
+            subtitle: '4 pieces waiting for you',
+            onTap: () => _showMessage(context, 'Saved items coming right up'),
+          ),
+          _settingItem(
+            icon: Icons.local_shipping_outlined,
+            title: 'Delivery addresses',
+            subtitle: 'Home · Jakarta, Indonesia',
+            onTap: () {},
+          ),
+          const SizedBox(height: 15),
+          _settingItem(
+            icon: Icons.help_outline_rounded,
+            title: 'Help & support',
+            subtitle: 'We are here when you need us',
+            onTap: () => _showMessage(context, 'A concierge will be with you soon'),
+          ),
+          _settingItem(
+            icon: Icons.logout_rounded,
+            title: 'Sign out',
+            subtitle: 'See you soon, Fulan',
+            accent: coral,
+            onTap: () => _showLogoutDialog(context),
+          ),
+        ],
       ),
     );
   }
 
-  Widget _buildProfileSection() {
+  Widget _profileCard() {
     return Container(
+      padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Color(0xFF4C53A5), Color(0xFF6B7CDA)],
+        gradient: const LinearGradient(
+          colors: [Color(0xFF2B253F), Color(0xFF20242B)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(15.0),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: lavender.withValues(alpha: .18)),
       ),
-      padding: const EdgeInsets.symmetric(vertical: 40.0, horizontal: 16.0),
       child: Row(
         children: [
-          ClipOval(
-            child: Image.asset(
-              'assets/images/.jpeg',
-              width: 100,
-              height: 100,
-              fit: BoxFit.cover,
+          Container(
+            width: 62,
+            height: 62,
+            decoration: BoxDecoration(
+              color: lavender,
+              borderRadius: BorderRadius.circular(20),
             ),
+            child: const Icon(Icons.person_rounded, color: ink, size: 34),
           ),
-          const SizedBox(width: 20.0),
-          Column(
+          const SizedBox(width: 15),
+          const Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
+            children: [
               Text(
                 'Fulan',
-                style: TextStyle(
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
+                style: TextStyle(fontSize: 19, fontWeight: FontWeight.w800),
               ),
-              SizedBox(height: 5.0),
+              SizedBox(height: 4),
               Text(
                 'fulan@example.com',
-                style: TextStyle(
-                  color: Colors.white70,
-                ),
+                style: TextStyle(color: muted, fontSize: 12),
               ),
-            ]
+              SizedBox(height: 8),
+              Text(
+                'VANTA member since 2024',
+                style: TextStyle(color: mint, fontSize: 11),
+              ),
+            ],
           ),
-        ]
-      )
-    );
-  }
-
-  Widget _buildSettingItem(
-    BuildContext context, { 
-      required String title, 
-      required IconData icon, 
-      required VoidCallback onTap 
-    }) {
-    return Card(
-      elevation: 4.0,
-      margin: const EdgeInsets.symmetric(vertical: 10),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15.0),
-      ),
-      child: ListTile(
-        leading: Icon(icon, color: const Color(0xFF4C53A5), size: 28.0),
-        title: Text(
-          title,
-          style: const TextStyle(
-            fontSize: 18.0,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        trailing: const Icon(Icons.arrow_forward_ios, size: 16.0),
-        onTap: onTap,
+        ],
       ),
     );
   }
 
-  Widget _buildSettingsSection(BuildContext context) {
-    return Column(
-      children: [
-        _buildSettingItem(
-          context,
-          title: 'Profile',
-          icon: Icons.person_outlined,
-          onTap: () {
-            Navigator.pushNamed(context, '/accountPage');
-          },
+  Widget _settingItem({
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required VoidCallback onTap,
+    Color accent = mint,
+  }) {
+    return ListTile(
+      contentPadding: const EdgeInsets.symmetric(vertical: 5),
+      onTap: onTap,
+      leading: Container(
+        width: 43,
+        height: 43,
+        decoration: BoxDecoration(
+          color: accent.withValues(alpha: .13),
+          borderRadius: BorderRadius.circular(14),
         ),
-        _buildSettingItem(
-          context,
-          title: 'Change Password',
-          icon: Icons.lock_outlined,
-          onTap: () {
-            Navigator.pushNamed(context, '/changePassword');
-          },
+        child: Icon(icon, color: accent, size: 21),
+      ),
+      title: Text(title, style: const TextStyle(fontWeight: FontWeight.w700)),
+      subtitle: Padding(
+        padding: const EdgeInsets.only(top: 3),
+        child: Text(
+          subtitle,
+          style: const TextStyle(color: muted, fontSize: 12),
         ),
-        _buildSettingItem(
-          context,
-          title: 'Notifications',
-          icon: Icons.notifications_outlined,
-          onTap: () {
-            Navigator.pushNamed(context, '/notifications');
-          },
-        ),
-        _buildSettingItem(
-          context,
-          title: 'Help & Support',
-          icon: Icons.help_outlined,
-          onTap: () {
-            Navigator.pushNamed(context, '/help');
-          },
-        ),
-        _buildSettingItem(
-          context,
-          title: 'Logout',
-          icon: Icons.logout,
-          onTap: () {
-            _showLogoutDialog(context);
-          },
-        ),
-      ],
+      ),
+      trailing: const Icon(Icons.chevron_right_rounded, color: muted),
     );
+  }
+
+  void _showMessage(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
   }
 
   void _showLogoutDialog(BuildContext context) {
-    showDialog(
+    showDialog<void>(
       context: context,
-      builder: (context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20.0),
+      builder: (dialogContext) => AlertDialog(
+        backgroundColor: surfaceElevated,
+        title: const Text('Sign out?'),
+        content: const Text(
+          'You can always come back whenever inspiration strikes.',
+          style: TextStyle(color: muted),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: const Text('Cancel'),
           ),
-          title: const Text('Logout', style: TextStyle(fontWeight: FontWeight.bold)),
-          content: const Text('Are you sure you want to logout?'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('Cancel', style: TextStyle(color: Colors.grey)),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                Navigator.pushNamed(context, '/loginPage');
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF4C53A5),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-              ),
-              child: const Text('Logout', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-            ),
-          ],
-        );
-      },
+          FilledButton(
+            onPressed: () {
+              Navigator.pop(dialogContext);
+              Navigator.pushReplacementNamed(context, 'LoginPage');
+            },
+            style: FilledButton.styleFrom(backgroundColor: coral, foregroundColor: ink),
+            child: const Text('Sign out'),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -1,24 +1,32 @@
 import 'package:flutter/material.dart';
 
+import '../theme.dart';
+
 class ChatPage extends StatelessWidget {
+  const ChatPage({super.key});
+
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      // Akan dilanjutkan 0pada langkah berikutnya
-    );
-  }
+  Widget build(BuildContext context) => const SizedBox.shrink();
 }
 
 class ListChatPage extends StatelessWidget {
-  // Tambahkan Data Daftar Chat di dalam class ChatListPage
-  final List<Map<String, String>> chats = [
-    {
-      'name': 'Nike Official',
-      'message': 'Segera Memesan Sebelum Kehabisan.',
-      'time': '12:30',
-      'avatar': 'assets/images/.jpg',
-    },
-    // Tambahkan chat lainnya...
+  const ListChatPage({super.key});
+
+  final chats = const [
+    (
+      name: 'Vanta concierge',
+      message: 'Your order is on its way ✨',
+      time: '12:30',
+      icon: Icons.auto_awesome,
+      color: lavender,
+    ),
+    (
+      name: 'Onda Studio',
+      message: 'Thanks for reaching out!',
+      time: 'Yesterday',
+      icon: Icons.checkroom_rounded,
+      color: mint,
+    ),
   ];
 
   @override
@@ -26,102 +34,52 @@ class ListChatPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'List Chat',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 25,
-            color: Color(0xFF4C53A5),
-          ),
+          'Messages',
+          style: TextStyle(fontWeight: FontWeight.w800, fontSize: 25),
         ),
-        backgroundColor: Colors.white,
-        iconTheme: const IconThemeData(color: Color(0xFF4C53A5)),
-        actions: [IconButton(icon: const Icon(Icons.search), onPressed: () {})],
-      ),
-      body: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 19.0,
-              vertical: 8.0,
-            ),
-            color: Colors.white,
-            child: Row(
-              children: [
-                TextButton(
-                  onPressed: () {},
-                  child: const Text(
-                    'Semua',
-                    style: TextStyle(
-                      color: Color(0xFF4C53A5),
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                TextButton(
-                  onPressed: () {},
-                  child: const Text(
-                    'Belum Dibaca',
-                    style: TextStyle(color: Color.fromRGBO(255, 114, 123, 216)),
-                  ),
-                ),
-              ],
-            ),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.search_rounded),
           ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: chats.length,
-              itemBuilder: (context, index) {
-                final chat = chats[index];
-                return ListTile(
-                  leading: CircleAvatar(
-                    backgroundImage: AssetImage(
-                      chat['avatar']!,
-                    ),
-                    radius: 25,
-                  ),
-                  title: Text(
-                    chat['name']!,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  subtitle: Text(chat['message']!),
-                  trailing: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        chat['time']!,
-                        style: const TextStyle(
-                          color: Colors.grey,
-                          fontSize: 12,
-                        ),
-                      ),
-                      if (index == 0)
-                        Container(
-                          margin: const EdgeInsets.only(top: 5),
-                          padding: const EdgeInsets.all(6),
-                          decoration: const BoxDecoration(
-                            color: Colors.red,
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Text(
-                            '1',
-                            style: TextStyle(color: Colors.white, fontSize: 12),
-                          ),
-                        ),
-                    ],
-                  ),
-                  onTap: () {
-                    Navigator.pushNamed(
-                      context,
-                      "ChatDetail",
-                      // arguments: {
-                      //   'contactName': chat['name']!,
-                      //   'avatarAsset': chat['avatar']!,
-                      // },
-                    );
-                  },
-                );
-              },
+        ],
+      ),
+      body: ListView(
+        padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
+        children: [
+          const Text(
+            'Stay in the loop',
+            style: TextStyle(color: muted, fontSize: 14),
+          ),
+          const SizedBox(height: 20),
+          ...chats.map(
+            (chat) => ListTile(
+              contentPadding: const EdgeInsets.symmetric(vertical: 8),
+              leading: Container(
+                width: 52,
+                height: 52,
+                decoration: BoxDecoration(
+                  color: chat.color,
+                  borderRadius: BorderRadius.circular(17),
+                ),
+                child: Icon(chat.icon, color: ink, size: 24),
+              ),
+              title: Text(
+                chat.name,
+                style: const TextStyle(fontWeight: FontWeight.w700),
+              ),
+              subtitle: Padding(
+                padding: const EdgeInsets.only(top: 5),
+                child: Text(
+                  chat.message,
+                  style: const TextStyle(color: muted, fontSize: 12),
+                ),
+              ),
+              trailing: Text(
+                chat.time,
+                style: const TextStyle(color: muted, fontSize: 11),
+              ),
+              onTap: () => Navigator.pushNamed(context, 'ChatDetail'),
             ),
           ),
         ],

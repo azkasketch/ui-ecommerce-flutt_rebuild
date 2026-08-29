@@ -1,54 +1,59 @@
 import 'package:flutter/material.dart';
-import 'package:ui_ecommerce/pages/account_page.dart';
-import 'package:ui_ecommerce/pages/cart_page.dart';
-import 'package:ui_ecommerce/widgets/CategoriesWidget.dart';
-import 'package:ui_ecommerce/widgets/ItemsWidget.dart';
-import 'package:ui_ecommerce/widgets/HomeAppBar.dart';
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+
+import '../theme.dart';
+import '../widgets/categories_widget.dart';
+import '../widgets/home_app_bar.dart';
+import '../widgets/items_widget.dart';
+import 'account_page.dart';
+import 'cart_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
-  _HomepageState createState() => _HomepageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _HomepageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
-  final PageController _pageController = PageController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: PageView(
-        controller: _pageController,
-        onPageChanged: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
+      body: IndexedStack(
+        index: _currentIndex,
         children: const [
           HomePageContent(),
           CartPage(),
           AccountPage(),
         ],
       ),
-      bottomNavigationBar: CurvedNavigationBar(
-        backgroundColor: Colors.transparent,
-        color: const Color(0xFF4C53A5),
-        height: 70.0,
-        items: const [
-          Icon(Icons.home, size: 30.0, color: Colors.white),
-          Icon(Icons.shopping_cart, size: 30.0, color: Colors.white),
-          Icon(Icons.account_circle_sharp, size: 30.0, color: Colors.white),
-        ],
-        index: _currentIndex,
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-            _pageController.jumpToPage(index);
-          });
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: _currentIndex,
+        onDestinationSelected: (index) {
+          setState(() => _currentIndex = index);
         },
+        backgroundColor: surface,
+        indicatorColor: coral.withValues(alpha: .18),
+        height: 74,
+        labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
+        destinations: const [
+          NavigationDestination(
+            icon: Icon(Icons.home_outlined),
+            selectedIcon: Icon(Icons.home_rounded, color: coral),
+            label: 'Home',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.shopping_bag_outlined),
+            selectedIcon: Icon(Icons.shopping_bag_rounded, color: coral),
+            label: 'Bag',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.person_outline_rounded),
+            selectedIcon: Icon(Icons.person_rounded, color: coral),
+            label: 'Profile',
+          ),
+        ],
       ),
     );
   }
@@ -59,75 +64,161 @@ class HomePageContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        const HomeAppBar(),
-        Container(
-          padding: EdgeInsets.only(top: 15.0),
-          decoration: const BoxDecoration(
-            color: Color(0xFFF5F5F5),
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(35.0),
-              topRight: Radius.circular(35.0),
+    return SafeArea(
+      bottom: false,
+      child: CustomScrollView(
+        slivers: [
+          const SliverToBoxAdapter(child: HomeAppBar()),
+          SliverToBoxAdapter(child: _searchBar()),
+          SliverToBoxAdapter(child: _heroBanner()),
+          const SliverToBoxAdapter(child: _SectionHeading(
+            title: 'Browse the edit',
+            action: 'See all',
+          )),
+          const SliverToBoxAdapter(child: CategoriesWidget()),
+          const SliverToBoxAdapter(child: _SectionHeading(
+            title: 'Curated for you',
+            action: 'View all',
+          )),
+          SliverToBoxAdapter(child: Itemswidget()),
+          const SliverToBoxAdapter(child: SizedBox(height: 28)),
+        ],
+      ),
+    );
+  }
+
+  Widget _searchBar() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
+      child: TextField(
+        decoration: InputDecoration(
+          hintText: 'Search products, brands & more',
+          prefixIcon: const Icon(Icons.search_rounded),
+          suffixIcon: Container(
+            margin: const EdgeInsets.all(7),
+            decoration: BoxDecoration(
+              color: surfaceElevated,
+              borderRadius: BorderRadius.circular(12),
             ),
-          ),
-          child: Column(
-            children: [
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 15.0),
-                margin: EdgeInsets.symmetric(horizontal: 15.0),
-                height: 50,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(30.0),
-                ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: TextFormField(
-                        decoration: const InputDecoration(
-                          hintText: 'Search here...',
-                          border: InputBorder.none,
-                        ),
-                      ),
-                    ),
-                    const Icon(
-                      Icons.camera_alt,
-                      size: 27.0,
-                      color: Color(0xFF4C53A5),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),
-                child: const Text(
-                  'Categories',
-                  style: TextStyle(
-                    color: Color(0xFF4C53A5),
-                    fontSize: 25.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              const CategoriesWidget(),
-              Container(
-                alignment: Alignment.centerLeft,
-                margin: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),
-                child: const Text(
-                  'Best Selling',
-                  style: TextStyle(
-                    color: Color(0xFF4C53A5),
-                    fontSize: 25.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              Itemswidget(),
-            ],
+            child: const Icon(Icons.tune_rounded, size: 19, color: mint),
           ),
         ),
-      ],
+      ),
+    );
+  }
+
+  Widget _heroBanner() {
+    return Container(
+      height: 190,
+      margin: const EdgeInsets.fromLTRB(20, 0, 20, 27),
+      clipBehavior: Clip.antiAlias,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(28),
+        gradient: const LinearGradient(
+          colors: [Color(0xFFB8A4FF), Color(0xFFE4DFFF)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+      ),
+      child: Stack(
+        children: [
+          Positioned(
+            right: -25,
+            bottom: -45,
+            child: Container(
+              width: 190,
+              height: 190,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white.withValues(alpha: .32),
+              ),
+            ),
+          ),
+          Positioned(
+            right: 25,
+            top: 25,
+            child: Icon(
+              Icons.local_mall_rounded,
+              size: 108,
+              color: Colors.white.withValues(alpha: .72),
+            ),
+          ),
+          const Padding(
+            padding: EdgeInsets.all(24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'THE WEEKEND EDIT',
+                  style: TextStyle(
+                    color: ink,
+                    fontWeight: FontWeight.w800,
+                    fontSize: 11,
+                    letterSpacing: 1.5,
+                  ),
+                ),
+                SizedBox(height: 9),
+                SizedBox(
+                  width: 190,
+                  child: Text(
+                    'Soft layers,\nstrong mood.',
+                    style: TextStyle(
+                      color: ink,
+                      fontWeight: FontWeight.w800,
+                      fontSize: 27,
+                      height: 1.05,
+                    ),
+                  ),
+                ),
+                Spacer(),
+                Text(
+                  'Explore collection  →',
+                  style: TextStyle(
+                    color: ink,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 13,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SectionHeading extends StatelessWidget {
+  final String title;
+  final String action;
+
+  const _SectionHeading({required this.title, required this.action});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 14),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 21,
+              fontWeight: FontWeight.w800,
+              letterSpacing: -.4,
+            ),
+          ),
+          Text(
+            action,
+            style: const TextStyle(
+              color: coral,
+              fontSize: 13,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
