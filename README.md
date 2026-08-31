@@ -1,4 +1,4 @@
-# Vanta Market
+# Bakul Market
 
 A premium dark-first e-commerce mobile UI rebuild built with Flutter. This project reimagines a standard shopping app into a more editorial, lifestyle-first storefront with soft pastel accents, elevated card layering, and a refined premium visual system.
 

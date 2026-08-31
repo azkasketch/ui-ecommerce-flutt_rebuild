@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:ui_ecommerce_rebuild/main.dart';
 
 void main() {
-  testWidgets('shows the Vanta Market login screen', (WidgetTester tester) async {
+  testWidgets('shows the Bakul Market login screen', (WidgetTester tester) async {
     await tester.pumpWidget(const MyApp());
 
     expect(find.text('Good to see you.'), findsOneWidget);

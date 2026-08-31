@@ -190,7 +190,7 @@ class _LoginPageState extends State<LoginPage> {
         ),
         const SizedBox(width: 12),
         Text(
-          'VANTA',
+          'BAKUL',
           style: GoogleFonts.instrumentSerif(
             fontSize: 20,
             fontWeight: FontWeight.w700,

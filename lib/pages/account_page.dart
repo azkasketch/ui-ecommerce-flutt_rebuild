@@ -122,7 +122,7 @@ class AccountPage extends StatelessWidget {
               ),
               SizedBox(height: 8),
               Text(
-                'VANTA member since 2024',
+                'BAKUL member since 2024',
                 style: TextStyle(color: mint, fontSize: 11),
               ),
             ],

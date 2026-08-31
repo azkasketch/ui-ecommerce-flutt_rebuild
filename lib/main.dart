@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
     final sansTextTheme = GoogleFonts.instrumentSansTextTheme();
 
     return MaterialApp(
-      title: 'Vanta Market',
+      title: 'Bakul Market',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
@@ -106,7 +106,7 @@ class MyApp extends StatelessWidget {
         'AccountPage': (context) => const AccountPage(),
         'CartPage': (context) => const CartPage(),
         'ListChat': (context) => ListChatPage(),
-        'ChatDetail': (context) => const ChatScreen(contactName: 'Vanta concierge'),
+        'ChatDetail': (context) => const ChatScreen(contactName: 'Bakul concierge'),
         'ItemsPage': (context) => const ProductDetailPage(),
         '/': (context) => const HomePage(),
       },

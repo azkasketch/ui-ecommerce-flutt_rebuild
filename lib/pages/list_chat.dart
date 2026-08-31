@@ -15,7 +15,7 @@ class ListChatPage extends StatelessWidget {
 
   final chats = const [
     (
-      name: 'Vanta concierge',
+      name: 'Bakul concierge',
       message: 'Your order is on its way ✨',
       time: '12:30',
       icon: Icons.auto_awesome,
