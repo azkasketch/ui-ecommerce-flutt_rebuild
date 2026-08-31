@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../theme.dart';
 
@@ -17,39 +18,67 @@ class HomeAppBar extends StatelessWidget {
             decoration: BoxDecoration(
               color: coral,
               borderRadius: BorderRadius.circular(15),
+              boxShadow: const [
+                BoxShadow(
+                  color: Color(0x50FF806D),
+                  blurRadius: 18,
+                  offset: Offset(0, 8),
+                ),
+              ],
             ),
             child: const Icon(Icons.auto_awesome, color: ink, size: 22),
           ),
           const SizedBox(width: 12),
-          const Column(
+          Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 'Good morning, Fulan',
-                style: TextStyle(color: muted, fontSize: 12),
+                style: GoogleFonts.instrumentSans(
+                  color: muted,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
-              SizedBox(height: 2),
+              const SizedBox(height: 2),
               Text(
                 'Find your next favorite',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+                style: GoogleFonts.instrumentSerif(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white,
+                ),
               ),
             ],
           ),
           const Spacer(),
-          IconButton(
-            tooltip: 'Messages',
-            onPressed: () => Navigator.pushNamed(context, 'ListChat'),
-            icon: const Icon(Icons.chat_bubble_outline_rounded),
-            color: Colors.white,
+          Container(
+            decoration: BoxDecoration(
+              color: surface,
+              borderRadius: BorderRadius.circular(14),
+            ),
+            child: IconButton(
+              tooltip: 'Messages',
+              onPressed: () => Navigator.pushNamed(context, 'ListChat'),
+              icon: const Icon(Icons.chat_bubble_outline_rounded),
+              color: Colors.white,
+            ),
           ),
+          const SizedBox(width: 8),
           Stack(
             clipBehavior: Clip.none,
             children: [
-              IconButton(
-                tooltip: 'Notifications',
-                onPressed: () {},
-                icon: const Icon(Icons.notifications_none_rounded),
-                color: Colors.white,
+              Container(
+                decoration: BoxDecoration(
+                  color: surface,
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: IconButton(
+                  tooltip: 'Notifications',
+                  onPressed: () {},
+                  icon: const Icon(Icons.notifications_none_rounded),
+                  color: Colors.white,
+                ),
               ),
               Positioned(
                 top: 7,

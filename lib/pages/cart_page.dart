@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../theme.dart';
 import '../widgets/cart_item_samples.dart';
@@ -22,12 +23,13 @@ class _CartPageState extends State<CartPage> {
             padding: const EdgeInsets.fromLTRB(20, 18, 20, 20),
             child: Row(
               children: [
-                const Text(
+                Text(
                   'Your bag',
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.w800,
+                  style: GoogleFonts.instrumentSerif(
+                    fontSize: 30,
+                    fontWeight: FontWeight.w700,
                     letterSpacing: -.8,
+                    color: Colors.white,
                   ),
                 ),
                 const Spacer(),
@@ -40,9 +42,13 @@ class _CartPageState extends State<CartPage> {
                     color: surface,
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: const Text(
+                  child: Text(
                     '3 items',
-                    style: TextStyle(color: muted, fontSize: 12),
+                    style: GoogleFonts.instrumentSans(
+                      color: muted,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
               ],
@@ -73,6 +79,13 @@ class _CartPageState extends State<CartPage> {
         color: surface,
         borderRadius: BorderRadius.circular(17),
         border: Border.all(color: surfaceElevated),
+        boxShadow: const [
+          BoxShadow(
+            color: softShadow,
+            blurRadius: 18,
+            offset: Offset(0, 10),
+          ),
+        ],
       ),
       child: Row(
         children: [
@@ -86,10 +99,13 @@ class _CartPageState extends State<CartPage> {
             child: const Icon(Icons.local_offer_outlined, color: mint, size: 18),
           ),
           const SizedBox(width: 11),
-          const Expanded(
+          Expanded(
             child: Text(
               'Have a promo code?',
-              style: TextStyle(fontWeight: FontWeight.w600),
+              style: GoogleFonts.instrumentSans(
+                fontWeight: FontWeight.w600,
+                color: Colors.white,
+              ),
             ),
           ),
           const Icon(Icons.chevron_right_rounded, color: muted),
@@ -104,6 +120,14 @@ class _CartPageState extends State<CartPage> {
       decoration: BoxDecoration(
         color: surface,
         borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: divider),
+        boxShadow: const [
+          BoxShadow(
+            color: softShadow,
+            blurRadius: 22,
+            offset: Offset(0, 14),
+          ),
+        ],
       ),
       child: Column(
         children: [
@@ -130,9 +154,12 @@ class _CartPageState extends State<CartPage> {
                   borderRadius: BorderRadius.circular(15),
                 ),
               ),
-              child: const Text(
+              child: Text(
                 'Checkout  →',
-                style: TextStyle(fontWeight: FontWeight.w800),
+                style: GoogleFonts.instrumentSans(
+                  fontWeight: FontWeight.w800,
+                  fontSize: 15,
+                ),
               ),
             ),
           ),
@@ -148,7 +175,7 @@ class _CartPageState extends State<CartPage> {
       children: [
         Text(
           label,
-          style: TextStyle(
+          style: GoogleFonts.instrumentSans(
             color: large ? Colors.white : muted,
             fontWeight: large ? FontWeight.w800 : FontWeight.w500,
             fontSize: large ? 17 : 13,
@@ -156,7 +183,7 @@ class _CartPageState extends State<CartPage> {
         ),
         Text(
           value,
-          style: TextStyle(
+          style: GoogleFonts.instrumentSans(
             color: valueColor,
             fontWeight: FontWeight.w800,
             fontSize: large ? 19 : 13,

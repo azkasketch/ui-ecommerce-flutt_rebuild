@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../theme.dart';
 
@@ -53,13 +54,14 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     _brandMark(),
                     const SizedBox(height: 74),
-                    const Text(
+                    Text(
                       'Good to see you.',
-                      style: TextStyle(
-                        fontSize: 36,
+                      style: GoogleFonts.instrumentSerif(
+                        fontSize: 42,
                         height: 1.05,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w700,
                         letterSpacing: -1.2,
+                        color: Colors.white,
                       ),
                     ),
                     const SizedBox(height: 12),
@@ -187,12 +189,13 @@ class _LoginPageState extends State<LoginPage> {
           child: const Icon(Icons.auto_awesome, color: ink, size: 21),
         ),
         const SizedBox(width: 12),
-        const Text(
+        Text(
           'VANTA',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w800,
+          style: GoogleFonts.instrumentSerif(
+            fontSize: 20,
+            fontWeight: FontWeight.w700,
             letterSpacing: 4,
+            color: Colors.white,
           ),
         ),
       ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../theme.dart';
 
@@ -14,12 +15,13 @@ class AccountPage extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Text(
+              Text(
                 'Profile',
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.w800,
+                style: GoogleFonts.instrumentSerif(
+                  fontSize: 30,
+                  fontWeight: FontWeight.w700,
                   letterSpacing: -.8,
+                  color: Colors.white,
                 ),
               ),
               const Spacer(),
@@ -32,9 +34,13 @@ class AccountPage extends StatelessWidget {
           const SizedBox(height: 8),
           _profileCard(),
           const SizedBox(height: 25),
-          const Text(
+          Text(
             'Your space',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+            style: GoogleFonts.instrumentSerif(
+              fontSize: 24,
+              fontWeight: FontWeight.w700,
+              color: Colors.white,
+            ),
           ),
           const SizedBox(height: 12),
           _settingItem(
@@ -98,12 +104,16 @@ class AccountPage extends StatelessWidget {
             child: const Icon(Icons.person_rounded, color: ink, size: 34),
           ),
           const SizedBox(width: 15),
-          const Column(
+          Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 'Fulan',
-                style: TextStyle(fontSize: 19, fontWeight: FontWeight.w800),
+                style: GoogleFonts.instrumentSerif(
+                  fontSize: 23,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white,
+                ),
               ),
               SizedBox(height: 4),
               Text(
@@ -138,10 +148,24 @@ class AccountPage extends StatelessWidget {
         decoration: BoxDecoration(
           color: accent.withValues(alpha: .13),
           borderRadius: BorderRadius.circular(14),
+          boxShadow: [
+            BoxShadow(
+              color: accent.withValues(alpha: .18),
+              blurRadius: 16,
+              offset: const Offset(0, 8),
+            ),
+          ],
         ),
         child: Icon(icon, color: accent, size: 21),
       ),
-      title: Text(title, style: const TextStyle(fontWeight: FontWeight.w700)),
+      title: Text(
+        title,
+        style: GoogleFonts.instrumentSans(
+          fontWeight: FontWeight.w700,
+          color: Colors.white,
+          fontSize: 15,
+        ),
+      ),
       subtitle: Padding(
         padding: const EdgeInsets.only(top: 3),
         child: Text(

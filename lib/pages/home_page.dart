@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../theme.dart';
 import '../widgets/categories_widget.dart';
@@ -143,37 +144,37 @@ class HomePageContent extends StatelessWidget {
               color: Colors.white.withValues(alpha: .72),
             ),
           ),
-          const Padding(
-            padding: EdgeInsets.all(24),
+          Padding(
+            padding: const EdgeInsets.all(24),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   'THE WEEKEND EDIT',
-                  style: TextStyle(
+                  style: GoogleFonts.instrumentSans(
                     color: ink,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w700,
                     fontSize: 11,
                     letterSpacing: 1.5,
                   ),
                 ),
-                SizedBox(height: 9),
+                const SizedBox(height: 9),
                 SizedBox(
                   width: 190,
                   child: Text(
                     'Soft layers,\nstrong mood.',
-                    style: TextStyle(
+                    style: GoogleFonts.instrumentSerif(
                       color: ink,
-                      fontWeight: FontWeight.w800,
-                      fontSize: 27,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 30,
                       height: 1.05,
                     ),
                   ),
                 ),
-                Spacer(),
+                const Spacer(),
                 Text(
                   'Explore collection  →',
-                  style: TextStyle(
+                  style: GoogleFonts.instrumentSans(
                     color: ink,
                     fontWeight: FontWeight.w700,
                     fontSize: 13,
@@ -203,15 +204,16 @@ class _SectionHeading extends StatelessWidget {
         children: [
           Text(
             title,
-            style: const TextStyle(
-              fontSize: 21,
-              fontWeight: FontWeight.w800,
+            style: GoogleFonts.instrumentSerif(
+              fontSize: 27,
+              fontWeight: FontWeight.w700,
               letterSpacing: -.4,
+              color: Colors.white,
             ),
           ),
           Text(
             action,
-            style: const TextStyle(
+            style: GoogleFonts.instrumentSans(
               color: coral,
               fontSize: 13,
               fontWeight: FontWeight.w700,

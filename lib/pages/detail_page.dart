@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../theme.dart';
 import '../widgets/items_widget.dart';
@@ -130,16 +131,21 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         children: [
           Text(
             product.category,
-            style: const TextStyle(color: mint, fontSize: 13),
+            style: GoogleFonts.instrumentSans(
+              color: mint,
+              fontSize: 13,
+              fontWeight: FontWeight.w700,
+            ),
           ),
           const SizedBox(height: 7),
           Text(
             product.name,
-            style: const TextStyle(
-              fontSize: 28,
+            style: GoogleFonts.instrumentSerif(
+              fontSize: 31,
               height: 1.1,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w700,
               letterSpacing: -.7,
+              color: Colors.white,
             ),
           ),
           const SizedBox(height: 13),
@@ -147,7 +153,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             children: [
               Text(
                 product.price,
-                style: const TextStyle(
+                style: GoogleFonts.instrumentSans(
                   color: coral,
                   fontSize: 22,
                   fontWeight: FontWeight.w800,
@@ -156,7 +162,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               const SizedBox(width: 9),
               Text(
                 product.oldPrice,
-                style: const TextStyle(
+                style: GoogleFonts.instrumentSans(
                   color: muted,
                   decoration: TextDecoration.lineThrough,
                 ),
@@ -164,21 +170,32 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               const Spacer(),
               const Icon(Icons.star_rounded, color: cream, size: 19),
               const SizedBox(width: 3),
-              const Text(
+              Text(
                 '4.9  ·  86 reviews',
-                style: TextStyle(color: muted, fontSize: 12),
+                style: GoogleFonts.instrumentSans(
+                  color: muted,
+                  fontSize: 12,
+                ),
               ),
             ],
           ),
           const SizedBox(height: 25),
-          const Text(
+          Text(
             'A considered essential for everyday rituals. Made to move with you, with soft textures and thoughtful details that feel good from the first wear.',
-            style: TextStyle(color: muted, height: 1.5, fontSize: 14),
+            style: GoogleFonts.instrumentSans(
+              color: muted,
+              height: 1.5,
+              fontSize: 14,
+            ),
           ),
           const SizedBox(height: 25),
-          const Text(
+          Text(
             'Select size',
-            style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
+            style: GoogleFonts.instrumentSans(
+              fontWeight: FontWeight.w700,
+              fontSize: 15,
+              color: Colors.white,
+            ),
           ),
           const SizedBox(height: 11),
           Row(
@@ -202,7 +219,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     ),
                     child: Text(
                       ['XS', 'S', 'M', 'L'][index],
-                      style: TextStyle(
+                      style: GoogleFonts.instrumentSans(
                         color: selected ? ink : Colors.white,
                         fontWeight: FontWeight.w700,
                       ),

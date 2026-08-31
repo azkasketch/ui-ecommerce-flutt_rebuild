@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../theme.dart';
 
@@ -43,6 +44,15 @@ class _CategoriesWidgetState extends State<CategoriesWidget> {
                 border: Border.all(
                   color: selected ? category.$3 : surfaceElevated,
                 ),
+                boxShadow: selected
+                    ? [
+                        BoxShadow(
+                          color: category.$3.withValues(alpha: .20),
+                          blurRadius: 18,
+                          offset: const Offset(0, 8),
+                        ),
+                      ]
+                    : null,
               ),
               padding: const EdgeInsets.symmetric(vertical: 10),
               child: Column(
@@ -55,7 +65,7 @@ class _CategoriesWidgetState extends State<CategoriesWidget> {
                   ),
                   Text(
                     category.$1,
-                    style: TextStyle(
+                    style: GoogleFonts.instrumentSans(
                       color: selected ? ink : Colors.white,
                       fontSize: 11,
                       fontWeight: FontWeight.w700,

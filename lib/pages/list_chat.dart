@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../theme.dart';
 
@@ -33,9 +34,13 @@ class ListChatPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Messages',
-          style: TextStyle(fontWeight: FontWeight.w800, fontSize: 25),
+          style: GoogleFonts.instrumentSerif(
+            fontWeight: FontWeight.w700,
+            fontSize: 28,
+            color: Colors.white,
+          ),
         ),
         actions: [
           IconButton(
@@ -47,9 +52,13 @@ class ListChatPage extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
         children: [
-          const Text(
+          Text(
             'Stay in the loop',
-            style: TextStyle(color: muted, fontSize: 14),
+            style: GoogleFonts.instrumentSans(
+              color: muted,
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+            ),
           ),
           const SizedBox(height: 20),
           ...chats.map(
@@ -66,18 +75,27 @@ class ListChatPage extends StatelessWidget {
               ),
               title: Text(
                 chat.name,
-                style: const TextStyle(fontWeight: FontWeight.w700),
+                style: GoogleFonts.instrumentSans(
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white,
+                ),
               ),
               subtitle: Padding(
                 padding: const EdgeInsets.only(top: 5),
                 child: Text(
                   chat.message,
-                  style: const TextStyle(color: muted, fontSize: 12),
+                  style: GoogleFonts.instrumentSans(
+                    color: muted,
+                    fontSize: 12,
+                  ),
                 ),
               ),
               trailing: Text(
                 chat.time,
-                style: const TextStyle(color: muted, fontSize: 11),
+                style: GoogleFonts.instrumentSans(
+                  color: muted,
+                  fontSize: 11,
+                ),
               ),
               onTap: () => Navigator.pushNamed(context, 'ChatDetail'),
             ),
