@@ -1,28 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../cart_manager.dart';
+import '../models/product.dart';
 import '../pages/detail_page.dart';
 import '../theme.dart';
-
-class Product {
-  final String name;
-  final String category;
-  final String price;
-  final String oldPrice;
-  final Color color;
-  final IconData icon;
-  final String tag;
-
-  const Product({
-    required this.name,
-    required this.category,
-    required this.price,
-    required this.oldPrice,
-    required this.color,
-    required this.icon,
-    required this.tag,
-  });
-}
 
 const products = [
   Product(
@@ -33,6 +15,8 @@ const products = [
     color: cream,
     icon: Icons.shopping_bag_rounded,
     tag: 'BESTSELLER',
+    imageUrl:
+        'https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=900&q=80',
   ),
   Product(
     name: 'Cloud Knit Set',
@@ -42,6 +26,8 @@ const products = [
     color: lavender,
     icon: Icons.checkroom_rounded,
     tag: 'NEW IN',
+    imageUrl:
+        'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=900&q=80',
   ),
   Product(
     name: 'Daily Ritual Set',
@@ -51,6 +37,8 @@ const products = [
     color: mint,
     icon: Icons.spa_rounded,
     tag: '-20%',
+    imageUrl:
+        'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=900&q=80',
   ),
   Product(
     name: 'Arc Wireless Headphones',
@@ -60,6 +48,8 @@ const products = [
     color: Color(0xFFF2B5D4),
     icon: Icons.headphones_rounded,
     tag: 'TRENDING',
+    imageUrl:
+        'https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=900&q=80',
   ),
 ];
 
@@ -112,16 +102,32 @@ class Itemswidget extends StatelessWidget {
                   Expanded(
                     child: Stack(
                       children: [
-                        Container(
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: product.color,
-                            borderRadius: BorderRadius.circular(17),
-                          ),
-                          child: Icon(
-                            product.icon,
-                            size: 75,
-                            color: ink.withValues(alpha: .72),
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(17),
+                          child: Image.network(
+                            product.imageUrl,
+                            width: double.infinity,
+                            height: double.infinity,
+                            fit: BoxFit.cover,
+                            loadingBuilder: (context, child, loadingProgress) {
+                              if (loadingProgress == null) return child;
+                              return Container(
+                                color: product.color,
+                                alignment: Alignment.center,
+                                child: const CircularProgressIndicator(strokeWidth: 2),
+                              );
+                            },
+                            errorBuilder: (context, error, stackTrace) {
+                              return Container(
+                                color: product.color,
+                                alignment: Alignment.center,
+                                child: Icon(
+                                  product.icon,
+                                  size: 75,
+                                  color: ink.withValues(alpha: .72),
+                                ),
+                              );
+                            },
                           ),
                         ),
                         Positioned(
@@ -200,17 +206,32 @@ class Itemswidget extends StatelessWidget {
                         ),
                       ),
                       const Spacer(),
-                      Container(
-                        width: 27,
-                        height: 27,
-                        decoration: BoxDecoration(
-                          color: coral,
-                          borderRadius: BorderRadius.circular(9),
-                        ),
-                        child: const Icon(
-                          Icons.add_rounded,
-                          size: 19,
-                          color: ink,
+                      InkWell(
+                        onTap: () {
+                          CartManager.instance.addProduct(product);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('${product.name} added to bag'),
+                              behavior: SnackBarBehavior.floating,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                          );
+                        },
+                        borderRadius: BorderRadius.circular(9),
+                        child: Container(
+                          width: 27,
+                          height: 27,
+                          decoration: BoxDecoration(
+                            color: coral,
+                            borderRadius: BorderRadius.circular(9),
+                          ),
+                          child: const Icon(
+                            Icons.add_rounded,
+                            size: 19,
+                            color: ink,
+                          ),
                         ),
                       ),
                     ],

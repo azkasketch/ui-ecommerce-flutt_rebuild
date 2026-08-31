@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
+import '../cart_manager.dart';
 import '../theme.dart';
-import 'items_widget.dart';
 
 class CartItemSamples extends StatefulWidget {
   const CartItemSamples({super.key});
@@ -11,13 +12,47 @@ class CartItemSamples extends StatefulWidget {
 }
 
 class _CartItemSamplesState extends State<CartItemSamples> {
-  final quantities = [1, 1, 2];
+  @override
+  void initState() {
+    super.initState();
+    CartManager.instance.addListener(_refresh);
+  }
+
+  @override
+  void dispose() {
+    CartManager.instance.removeListener(_refresh);
+    super.dispose();
+  }
+
+  void _refresh() => setState(() {});
 
   @override
   Widget build(BuildContext context) {
+    final items = CartManager.instance.items;
+    if (items.isEmpty) {
+      return Container(
+        padding: const EdgeInsets.all(18),
+        decoration: BoxDecoration(
+          color: surface,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: surfaceElevated),
+        ),
+        child: Text(
+          'Your bag is empty — add something delightful.',
+          style: GoogleFonts.instrumentSans(
+            color: muted,
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      );
+    }
+
     return Column(
-      children: List.generate(3, (index) {
-        final product = products[index];
+      children: List.generate(items.length, (index) {
+        final cartItem = items[index];
+        final product = cartItem.product;
+
         return Container(
           margin: const EdgeInsets.only(bottom: 12),
           padding: const EdgeInsets.all(10),
@@ -28,14 +63,33 @@ class _CartItemSamplesState extends State<CartItemSamples> {
           ),
           child: Row(
             children: [
-              Container(
-                width: 76,
-                height: 76,
-                decoration: BoxDecoration(
-                  color: product.color,
-                  borderRadius: BorderRadius.circular(15),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(15),
+                child: Image.network(
+                  product.imageUrl,
+                  width: 76,
+                  height: 76,
+                  fit: BoxFit.cover,
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return Container(
+                      width: 76,
+                      height: 76,
+                      color: product.color,
+                      alignment: Alignment.center,
+                      child: const CircularProgressIndicator(strokeWidth: 2),
+                    );
+                  },
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      width: 76,
+                      height: 76,
+                      color: product.color,
+                      alignment: Alignment.center,
+                      child: Icon(product.icon, color: ink.withValues(alpha: .75), size: 38),
+                    );
+                  },
                 ),
-                child: Icon(product.icon, color: ink.withValues(alpha: .75), size: 38),
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -44,22 +98,27 @@ class _CartItemSamplesState extends State<CartItemSamples> {
                   children: [
                     Text(
                       product.category,
-                      style: const TextStyle(color: muted, fontSize: 10),
+                      style: GoogleFonts.instrumentSans(
+                        color: muted,
+                        fontSize: 10,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       product.name,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
+                      style: GoogleFonts.instrumentSans(
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
+                        color: Colors.white,
                       ),
                     ),
                     const SizedBox(height: 8),
                     Text(
                       product.price,
-                      style: const TextStyle(
+                      style: GoogleFonts.instrumentSans(
                         color: coral,
                         fontWeight: FontWeight.w800,
                       ),
@@ -71,7 +130,7 @@ class _CartItemSamplesState extends State<CartItemSamples> {
                 children: [
                   IconButton(
                     visualDensity: VisualDensity.compact,
-                    onPressed: () {},
+                    onPressed: () => CartManager.instance.removeProduct(product),
                     icon: const Icon(
                       Icons.delete_outline_rounded,
                       color: muted,
@@ -82,20 +141,27 @@ class _CartItemSamplesState extends State<CartItemSamples> {
                     children: [
                       _quantityButton(
                         Icons.remove_rounded,
-                        () => setState(() {
-                          if (quantities[index] > 1) quantities[index]--;
-                        }),
+                        () => CartManager.instance.updateQuantity(
+                          product,
+                          cartItem.quantity - 1,
+                        ),
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8),
                         child: Text(
-                          '${quantities[index]}',
-                          style: const TextStyle(fontWeight: FontWeight.w700),
+                          '${cartItem.quantity}',
+                          style: GoogleFonts.instrumentSans(
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                       _quantityButton(
                         Icons.add_rounded,
-                        () => setState(() => quantities[index]++),
+                        () => CartManager.instance.updateQuantity(
+                          product,
+                          cartItem.quantity + 1,
+                        ),
                       ),
                     ],
                   ),

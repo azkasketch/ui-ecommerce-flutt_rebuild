@@ -1,8 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../cart_manager.dart';
+import '../models/product.dart';
 import '../theme.dart';
-import '../widgets/items_widget.dart';
+
+const _fallbackProduct = Product(
+  name: 'Sculpted Everyday Tote',
+  category: 'Atelier No. 8',
+  price: '\$84',
+  oldPrice: '\$110',
+  color: cream,
+  icon: Icons.shopping_bag_rounded,
+  tag: 'BESTSELLER',
+  imageUrl:
+      'https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=900&q=80',
+);
 
 class ProductDetailPage extends StatefulWidget {
   final Product? product;
@@ -17,7 +30,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   int _selectedSize = 1;
   bool _saved = false;
 
-  Product get product => widget.product ?? products.first;
+  Product get product => widget.product ?? _fallbackProduct;
 
   @override
   Widget build(BuildContext context) {
@@ -53,9 +66,18 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         child: SizedBox(
           height: 54,
           child: FilledButton(
-            onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Added to your bag')),
-            ),
+            onPressed: () {
+              CartManager.instance.addProduct(product);
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('${product.name} added to your bag'),
+                  behavior: SnackBarBehavior.floating,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              );
+            },
             style: FilledButton.styleFrom(
               backgroundColor: coral,
               foregroundColor: ink,
@@ -95,8 +117,29 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               ),
             ),
           ),
-          Center(
-            child: Icon(product.icon, size: 170, color: ink.withValues(alpha: .78)),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(30),
+            child: Image.network(
+              product.imageUrl,
+              width: double.infinity,
+              height: double.infinity,
+              fit: BoxFit.cover,
+              loadingBuilder: (context, child, loadingProgress) {
+                if (loadingProgress == null) return child;
+                return Container(
+                  color: product.color,
+                  alignment: Alignment.center,
+                  child: const CircularProgressIndicator(strokeWidth: 2),
+                );
+              },
+              errorBuilder: (context, error, stackTrace) {
+                return Container(
+                  color: product.color,
+                  alignment: Alignment.center,
+                  child: Icon(product.icon, size: 170, color: ink.withValues(alpha: .78)),
+                );
+              },
+            ),
           ),
           Positioned(
             left: 18,

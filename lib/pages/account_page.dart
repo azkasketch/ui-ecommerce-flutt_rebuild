@@ -94,14 +94,43 @@ class AccountPage extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Container(
-            width: 62,
-            height: 62,
-            decoration: BoxDecoration(
-              color: lavender,
-              borderRadius: BorderRadius.circular(20),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: Image.network(
+              'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=400&q=80',
+              width: 62,
+              height: 62,
+              fit: BoxFit.cover,
+              loadingBuilder: (context, child, loadingProgress) {
+                if (loadingProgress == null) return child;
+                return Container(
+                  width: 62,
+                  height: 62,
+                  decoration: BoxDecoration(
+                    color: lavender,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: const Center(
+                    child: SizedBox(
+                      width: 16,
+                      height: 16,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    ),
+                  ),
+                );
+              },
+              errorBuilder: (context, error, stackTrace) {
+                return Container(
+                  width: 62,
+                  height: 62,
+                  decoration: BoxDecoration(
+                    color: lavender,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: const Icon(Icons.person_rounded, color: ink, size: 34),
+                );
+              },
             ),
-            child: const Icon(Icons.person_rounded, color: ink, size: 34),
           ),
           const SizedBox(width: 15),
           Column(

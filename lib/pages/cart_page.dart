@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../cart_manager.dart';
 import '../theme.dart';
 import '../widgets/cart_item_samples.dart';
 
@@ -13,7 +14,26 @@ class CartPage extends StatefulWidget {
 
 class _CartPageState extends State<CartPage> {
   @override
+  void initState() {
+    super.initState();
+    CartManager.instance.addListener(_refresh);
+  }
+
+  @override
+  void dispose() {
+    CartManager.instance.removeListener(_refresh);
+    super.dispose();
+  }
+
+  void _refresh() => setState(() {});
+
+  @override
   Widget build(BuildContext context) {
+    final cart = CartManager.instance;
+    final itemCount = cart.itemCount;
+    final subtotal = cart.subtotal;
+    final shipping = subtotal > 0 ? 0.0 : 0.0;
+
     return SafeArea(
       bottom: false,
       child: Column(
@@ -43,7 +63,7 @@ class _CartPageState extends State<CartPage> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
-                    '3 items',
+                    '$itemCount ${itemCount == 1 ? 'item' : 'items'}',
                     style: GoogleFonts.instrumentSans(
                       color: muted,
                       fontSize: 12,
@@ -62,7 +82,7 @@ class _CartPageState extends State<CartPage> {
                 const SizedBox(height: 10),
                 _couponRow(),
                 const SizedBox(height: 20),
-                _summary(),
+                _summary(subtotal, shipping),
                 const SizedBox(height: 105),
               ],
             ),
@@ -114,7 +134,9 @@ class _CartPageState extends State<CartPage> {
     );
   }
 
-  Widget _summary() {
+  Widget _summary(double subtotal, double shipping) {
+    final total = subtotal + shipping;
+
     return Container(
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
@@ -131,14 +153,14 @@ class _CartPageState extends State<CartPage> {
       ),
       child: Column(
         children: [
-          _line('Subtotal', '\$194'),
+          _line('Subtotal', _currency(subtotal)),
           const SizedBox(height: 11),
-          _line('Shipping', 'Free', valueColor: mint),
+          _line('Shipping', shipping == 0 ? 'Free' : _currency(shipping), valueColor: mint),
           const Padding(
             padding: EdgeInsets.symmetric(vertical: 15),
             child: Divider(color: surfaceElevated, height: 1),
           ),
-          _line('Total', '\$194', large: true),
+          _line('Total', _currency(total), large: true),
           const SizedBox(height: 16),
           SizedBox(
             width: double.infinity,
@@ -167,6 +189,8 @@ class _CartPageState extends State<CartPage> {
       ),
     );
   }
+
+  String _currency(double value) => '\$${value.toStringAsFixed(0)}';
 
   Widget _line(String label, String value,
       {Color valueColor = Colors.white, bool large = false}) {
