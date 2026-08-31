@@ -1,13 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../order_manager.dart';
 import '../theme.dart';
 
-class AccountPage extends StatelessWidget {
+class AccountPage extends StatefulWidget {
   const AccountPage({super.key});
 
   @override
+  State<AccountPage> createState() => _AccountPageState();
+}
+
+class _AccountPageState extends State<AccountPage> {
+  @override
+  void initState() {
+    super.initState();
+    OrderManager.instance.addListener(_refresh);
+  }
+
+  @override
+  void dispose() {
+    OrderManager.instance.removeListener(_refresh);
+    super.dispose();
+  }
+
+  void _refresh() => setState(() {});
+
+  @override
   Widget build(BuildContext context) {
+    final orders = OrderManager.instance.orders;
+    final latestOrderCount = orders.isEmpty
+        ? 0
+        : orders.first.totalQuantity;
+
     return SafeArea(
       bottom: false,
       child: ListView(
@@ -33,6 +58,59 @@ class AccountPage extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           _profileCard(),
+          if (orders.isNotEmpty) ...[
+            const SizedBox(height: 18),
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: surface,
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: surfaceElevated),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Recent orders',
+                    style: GoogleFonts.instrumentSans(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 14,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  ...orders.take(2).map((order) {
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 8,
+                            height: 8,
+                            decoration: BoxDecoration(
+                              color: mint,
+                              borderRadius: BorderRadius.circular(99),
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: Text(
+                              '${order.summary} · ${_currency(order.total)}',
+                              style: GoogleFonts.instrumentSans(
+                                color: muted,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }),
+                ],
+              ),
+            ),
+          ],
           const SizedBox(height: 25),
           Text(
             'Your space',
@@ -46,8 +124,15 @@ class AccountPage extends StatelessWidget {
           _settingItem(
             icon: Icons.shopping_bag_outlined,
             title: 'Orders',
-            subtitle: 'Track and manage your purchases',
-            onTap: () => _showMessage(context, 'Your orders are up to date'),
+            subtitle: latestOrderCount == 0
+                ? 'Track and manage your purchases'
+                : '$latestOrderCount item${latestOrderCount > 1 ? 's' : ''} in your latest order',
+            onTap: () => _showMessage(
+              context,
+              orders.isEmpty
+                  ? 'Your orders are up to date'
+                  : 'Latest order: ${orders.first.summary}',
+            ),
           ),
           _settingItem(
             icon: Icons.favorite_border_rounded,
@@ -209,6 +294,8 @@ class AccountPage extends StatelessWidget {
   void _showMessage(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
   }
+
+  String _currency(double value) => '\$${value.toStringAsFixed(0)}';
 
   void _showLogoutDialog(BuildContext context) {
     showDialog<void>(

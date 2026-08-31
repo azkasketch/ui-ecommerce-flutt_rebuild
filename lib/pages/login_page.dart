@@ -38,16 +38,6 @@ class _LoginPageState extends State<LoginPage> {
           Positioned.fill(
             child: Container(color: ink),
           ),
-          Positioned(
-            top: -90,
-            right: -65,
-            child: _glow(220, lavender.withValues(alpha: .3)),
-          ),
-          Positioned(
-            bottom: -120,
-            left: -75,
-            child: _glow(250, coral.withValues(alpha: .18)),
-          ),
           SafeArea(
             child: SingleChildScrollView(
               padding: const EdgeInsets.fromLTRB(24, 28, 24, 24),

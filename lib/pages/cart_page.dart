@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../cart_manager.dart';
+import '../order_manager.dart';
 import '../theme.dart';
 import '../widgets/cart_item_samples.dart';
 
@@ -13,6 +14,8 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
+  bool _checkoutDone = false;
+
   @override
   void initState() {
     super.initState();
@@ -25,7 +28,13 @@ class _CartPageState extends State<CartPage> {
     super.dispose();
   }
 
-  void _refresh() => setState(() {});
+  void _refresh() {
+    setState(() {
+      if (CartManager.instance.items.isNotEmpty) {
+        _checkoutDone = false;
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,6 +92,10 @@ class _CartPageState extends State<CartPage> {
                 _couponRow(),
                 const SizedBox(height: 20),
                 _summary(subtotal, shipping),
+                if (_checkoutDone) ...[
+                  const SizedBox(height: 16),
+                  _checkoutNotice(),
+                ],
                 const SizedBox(height: 105),
               ],
             ),
@@ -166,9 +179,26 @@ class _CartPageState extends State<CartPage> {
             width: double.infinity,
             height: 51,
             child: FilledButton(
-              onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Checkout is ready when you are')),
-              ),
+              onPressed: () {
+                if (CartManager.instance.items.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Your bag is empty. Add something first.')),
+                  );
+                  return;
+                }
+
+                final items = List<CartItem>.from(CartManager.instance.items);
+                OrderManager.instance.addFromCart(items);
+                CartManager.instance.clear();
+                setState(() => _checkoutDone = true);
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Your bag has been moved to Orders.'),
+                    behavior: SnackBarBehavior.floating,
+                  ),
+                );
+              },
               style: FilledButton.styleFrom(
                 backgroundColor: coral,
                 foregroundColor: ink,
@@ -182,6 +212,33 @@ class _CartPageState extends State<CartPage> {
                   fontWeight: FontWeight.w800,
                   fontSize: 15,
                 ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _checkoutNotice() {
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: mint.withValues(alpha: .12),
+        border: Border.all(color: mint.withValues(alpha: .3)),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Row(
+        children: [
+          const Icon(Icons.check_circle_rounded, color: mint),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              'Your bag has been moved to Orders.',
+              style: GoogleFonts.instrumentSans(
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
+                fontSize: 13,
               ),
             ),
           ),
