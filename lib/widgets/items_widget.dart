@@ -27,7 +27,7 @@ const products = [
     icon: Icons.checkroom_rounded,
     tag: 'NEW IN',
     imageUrl:
-        'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=900&q=80',
+        'https://plus.unsplash.com/premium_photo-1755534537453-d1e5670c1f18?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8Y2xvdWQlMjBrbml0JTIwc2V0fGVufDB8fDB8fHww',
   ),
   Product(
     name: 'Daily Ritual Set',

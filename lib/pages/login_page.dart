@@ -32,8 +32,12 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ink,
       body: Stack(
         children: [
+          Positioned.fill(
+            child: Container(color: ink),
+          ),
           Positioned(
             top: -90,
             right: -65,
@@ -73,6 +77,7 @@ class _LoginPageState extends State<LoginPage> {
                     TextFormField(
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
+                      style: TextStyle(color: Colors.white),
                       decoration: const InputDecoration(
                         labelText: 'Email address',
                         prefixIcon: Icon(Icons.mail_outline_rounded),
@@ -88,6 +93,7 @@ class _LoginPageState extends State<LoginPage> {
                     TextFormField(
                       controller: _passwordController,
                       obscureText: _obscurePassword,
+                      style: TextStyle(color: Colors.white),
                       decoration: InputDecoration(
                         labelText: 'Password',
                         prefixIcon: const Icon(Icons.lock_outline_rounded),
