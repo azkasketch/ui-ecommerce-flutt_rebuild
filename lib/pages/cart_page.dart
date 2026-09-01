@@ -187,17 +187,7 @@ class _CartPageState extends State<CartPage> {
                   return;
                 }
 
-                final items = List<CartItem>.from(CartManager.instance.items);
-                OrderManager.instance.addFromCart(items);
-                CartManager.instance.clear();
-                setState(() => _checkoutDone = true);
-
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Your bag has been moved to Orders.'),
-                    behavior: SnackBarBehavior.floating,
-                  ),
-                );
+                _showPaymentSheet(context);
               },
               style: FilledButton.styleFrom(
                 backgroundColor: coral,
@@ -234,7 +224,7 @@ class _CartPageState extends State<CartPage> {
           const SizedBox(width: 10),
           Expanded(
             child: Text(
-              'Your bag has been moved to Orders.',
+              'Payment successful. Your order is now in Orders.',
               style: GoogleFonts.instrumentSans(
                 color: Colors.white,
                 fontWeight: FontWeight.w700,
@@ -243,6 +233,84 @@ class _CartPageState extends State<CartPage> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Future<void> _showPaymentSheet(BuildContext context) async {
+    String selected = 'E-Wallet';
+    final result = await showDialog<String>(
+      context: context,
+      builder: (dialogContext) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              backgroundColor: surfaceElevated,
+              title: Text(
+                'Choose payment',
+                style: GoogleFonts.instrumentSans(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _paymentOption('E-Wallet', selected, (value) => setState(() => selected = value)),
+                  _paymentOption('Credit Card', selected, (value) => setState(() => selected = value)),
+                  _paymentOption('Bank Transfer', selected, (value) => setState(() => selected = value)),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(dialogContext),
+                  child: const Text('Cancel'),
+                ),
+                FilledButton(
+                  onPressed: () => Navigator.pop(dialogContext, selected),
+                  style: FilledButton.styleFrom(backgroundColor: coral, foregroundColor: ink),
+                  child: const Text('Pay now'),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+
+    if (result == null) return;
+
+    final items = List<CartItem>.from(CartManager.instance.items);
+    OrderManager.instance.addFromCart(items, paymentMethod: result);
+    CartManager.instance.clear();
+    setState(() => _checkoutDone = true);
+
+    if (!mounted) return;
+    Navigator.pushNamed(context, 'OrdersPage');
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Payment successful via $result.'),
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
+
+  RadioListTile<String> _paymentOption(
+    String value,
+    String selected, 
+    ValueChanged<String> onChanged,
+  ) {
+    return RadioListTile<String>(
+      value: value,
+      groupValue: selected,
+      onChanged: (newValue) => onChanged(newValue ?? value),
+      activeColor: coral,
+      title: Text(
+        value,
+        style: GoogleFonts.instrumentSans(
+          color: Colors.white,
+          fontWeight: FontWeight.w600,
+        ),
       ),
     );
   }

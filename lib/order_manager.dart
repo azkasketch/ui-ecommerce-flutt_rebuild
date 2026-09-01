@@ -8,15 +8,18 @@ class OrderRecord {
     required this.items,
     required this.placedAt,
     required this.total,
+    required this.paymentMethod,
   });
 
   final String id;
   final List<CartItem> items;
   final DateTime placedAt;
   final double total;
+  final String paymentMethod;
 
   int get totalQuantity => items.fold(0, (sum, item) => sum + item.quantity);
   String get summary => items.length == 1 ? items.first.product.name : '${items.length} items';
+  String get orderNumber => '#BK-${id.substring(id.length - 5)}';
 }
 
 class OrderManager extends ChangeNotifier {
@@ -28,23 +31,25 @@ class OrderManager extends ChangeNotifier {
 
   List<OrderRecord> get orders => List.unmodifiable(_orders);
 
-  void addFromCart(List<CartItem> items) {
+  void addFromCart(List<CartItem> items, {String paymentMethod = 'E-Wallet'}) {
     if (items.isEmpty) return;
 
     final total = items.fold(
       0.0,
       (sum, item) => sum + _parsePrice(item.product.price) * item.quantity,
     );
+    final now = DateTime.now();
 
     _orders.insert(
       0,
       OrderRecord(
-        id: DateTime.now().microsecondsSinceEpoch.toString(),
+        id: now.microsecondsSinceEpoch.toString(),
         items: List<CartItem>.from(
           items.map((item) => CartItem(product: item.product, quantity: item.quantity)),
         ),
-        placedAt: DateTime.now(),
+        placedAt: now,
         total: total,
+        paymentMethod: paymentMethod,
       ),
     );
 

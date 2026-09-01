@@ -8,6 +8,7 @@ import 'pages/detail_chat.dart';
 import 'pages/home_page.dart';
 import 'pages/list_chat.dart';
 import 'pages/login_page.dart';
+import 'pages/orders_page.dart';
 import 'theme.dart';
 
 void main() {
@@ -105,6 +106,7 @@ class MyApp extends StatelessWidget {
         'LoginPage': (context) => const LoginPage(),
         'AccountPage': (context) => const AccountPage(),
         'CartPage': (context) => const CartPage(),
+        'OrdersPage': (context) => const OrdersPage(),
         'ListChat': (context) => ListChatPage(),
         'ChatDetail': (context) => const ChatScreen(contactName: 'Bakul concierge'),
         'ItemsPage': (context) => const ProductDetailPage(),

@@ -60,54 +60,58 @@ class _AccountPageState extends State<AccountPage> {
           _profileCard(),
           if (orders.isNotEmpty) ...[
             const SizedBox(height: 18),
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: surface,
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: surfaceElevated),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Recent orders',
-                    style: GoogleFonts.instrumentSans(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 14,
+            InkWell(
+              borderRadius: BorderRadius.circular(20),
+              onTap: () => Navigator.pushNamed(context, 'OrdersPage'),
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: surface,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: surfaceElevated),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Recent orders',
+                      style: GoogleFonts.instrumentSans(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 14,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 10),
-                  ...orders.take(2).map((order) {
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 8),
-                      child: Row(
-                        children: [
-                          Container(
-                            width: 8,
-                            height: 8,
-                            decoration: BoxDecoration(
-                              color: mint,
-                              borderRadius: BorderRadius.circular(99),
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: Text(
-                              '${order.summary} · ${_currency(order.total)}',
-                              style: GoogleFonts.instrumentSans(
-                                color: muted,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
+                    const SizedBox(height: 10),
+                    ...orders.take(2).map((order) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 8),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 8,
+                              height: 8,
+                              decoration: BoxDecoration(
+                                color: mint,
+                                borderRadius: BorderRadius.circular(99),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    );
-                  }),
-                ],
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Text(
+                                '${order.summary} · ${_currency(order.total)}',
+                                style: GoogleFonts.instrumentSans(
+                                  color: muted,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }),
+                  ],
+                ),
               ),
             ),
           ],
@@ -127,12 +131,7 @@ class _AccountPageState extends State<AccountPage> {
             subtitle: latestOrderCount == 0
                 ? 'Track and manage your purchases'
                 : '$latestOrderCount item${latestOrderCount > 1 ? 's' : ''} in your latest order',
-            onTap: () => _showMessage(
-              context,
-              orders.isEmpty
-                  ? 'Your orders are up to date'
-                  : 'Latest order: ${orders.first.summary}',
-            ),
+            onTap: () => Navigator.pushNamed(context, 'OrdersPage'),
           ),
           _settingItem(
             icon: Icons.favorite_border_rounded,
