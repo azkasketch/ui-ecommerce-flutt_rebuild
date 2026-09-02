@@ -1,26 +1,43 @@
 # Bakul Market
 
-A premium dark-first e-commerce mobile UI rebuild built with Flutter. This project reimagines a standard shopping app into a more editorial, lifestyle-first storefront with soft pastel accents, elevated card layering, and a refined premium visual system.
+Bakul Market is a premium dark-first e-commerce storefront demo built with Flutter. The app combines lifestyle-brand storytelling, curated product browsing, and a smooth mobile shopping flow in a polished, modern interface.
 
 ## Overview
 
-The app is designed around a modern mobile shopping experience with:
+This project is designed to feel like a premium mobile commerce experience rather than a generic marketplace. The visual direction prioritizes editorial typography, luminous dark surfaces, soft pastel accents, and high-contrast product cards that make the storefront feel more premium and lifestyle-driven.
 
-- dark luxury base palette
-- editorial hero sections and product storytelling
-- soft coral, mint, and lavender accent colors
-- rounded card surfaces with subtle depth and shadows
-- product-focused browsing and cart/profile flows
-- Material 3 styling with a custom premium design language
+## Highlights
 
-## Design Direction
+- dark luxury-first UI with warm editorial styling
+- product-first home feed with curated cards and action buttons
+- real product imagery via Unsplash network images
+- add-to-bag interaction shared across home and detail screens
+- checkout flow with fake payment selection
+- paid order list for demo purchases
+- profile area with personal branding and recent order state
+- polished Material 3 styling and Google font pairing
 
-This project follows a dark-first aesthetic with warm editorial typography and a mobile-first shopping flow. The visual identity uses:
+## Design System
 
-- Instrument Serif for headline and editorial moments
+The app uses a refined design language based on:
+
+- Instrument Serif for headlines and editorial moments
 - Instrument Sans for body text, labels, and interface copy
-- subdued neutral surfaces with intentional contrast
-- colorful product tiles and feature cards to keep the interface playful and contemporary
+- soft coral, mint, and lavender accents on a near-black base
+- rounded cards, subtle shadows, and elevated surfaces for depth
+- warm luxury palette balanced with playful retail energy
+
+## Current Demo Flow
+
+The app currently supports a practical storefront demo flow:
+
+1. Login screen
+2. Home browsing with product grid and category styling
+3. Product detail view with CTA to add to bag
+4. Bag/cart summary with live totals
+5. Payment selection modal
+6. Checkout confirmation and transition to orders
+7. Orders list with purchase summary and item details
 
 ## Tech Stack
 
@@ -29,23 +46,15 @@ This project follows a dark-first aesthetic with warm editorial typography and a
 - Material 3
 - Google Fonts
 
-## App Flow
-
-The current UI includes:
-
-- login screen
-- home screen with search, hero banner, category chips, and featured items
-- product detail page
-- cart summary flow
-- profile/account screen
-- chat/message list screen
-
 ## Project Structure
 
 ```text
 lib/
+├── cart_manager.dart
 ├── main.dart
-├── theme.dart
+├── models/
+│   └── product.dart
+├── order_manager.dart
 ├── pages/
 │   ├── account_page.dart
 │   ├── cart_page.dart
@@ -53,7 +62,9 @@ lib/
 │   ├── detail_chat.dart
 │   ├── home_page.dart
 │   ├── list_chat.dart
-│   └── login_page.dart
+│   ├── login_page.dart
+│   └── orders_page.dart
+├── theme.dart
 └── widgets/
     ├── cart_item_samples.dart
     ├── categories_widget.dart
@@ -66,7 +77,7 @@ lib/
 ### Prerequisites
 
 - Flutter SDK installed and configured
-- Android/iOS emulator or physical device for testing
+- Android emulator, iOS Simulator, or physical device
 
 ### Install dependencies
 
@@ -94,4 +105,4 @@ flutter analyze
 
 ## Notes
 
-This is a UI-focused rebuild and prototype rather than a full production commerce backend. The intention is to establish a strong visual foundation and mobile shopping experience that can later be extended with real data, authentication, checkout, and product APIs.
+This is a UI-first e-commerce prototype and demo app, not a production backend system. The goal is to demonstrate a premium mobile shopping experience, interaction flow, and visual brand direction that can later be extended with authentication, real product APIs, persistent storage, and full checkout integration.
