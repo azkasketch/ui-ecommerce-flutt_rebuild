@@ -65,6 +65,7 @@ lib/
 │   ├── login_page.dart
 │   └── orders_page.dart
 ├── theme.dart
+├── widget_previews.dart
 └── widgets/
     ├── cart_item_samples.dart
     ├── categories_widget.dart
@@ -90,6 +91,20 @@ flutter pub get
 ```bash
 flutter run
 ```
+
+### Preview screens and components
+
+The project includes Flutter Widget Preview entries for the login, home, product
+detail, bag, profile, messages, conversation, orders, and order detail screens,
+plus the product grid component.
+
+```bash
+flutter widget-preview start
+```
+
+In the previewer, browse the **Bakul Market / Screens** and
+**Bakul Market / Components** groups. Some previews use remote product/profile
+images and Google Fonts, so an internet connection is needed for those assets.
 
 ### Run tests
 

@@ -5,11 +5,13 @@ import '../order_manager.dart';
 import '../theme.dart';
 
 class OrdersPage extends StatelessWidget {
-  const OrdersPage({super.key});
+  const OrdersPage({super.key, this.orders});
+
+  final List<OrderRecord>? orders;
 
   @override
   Widget build(BuildContext context) {
-    final orders = OrderManager.instance.orders;
+    final visibleOrders = orders ?? OrderManager.instance.orders;
 
     return Scaffold(
       backgroundColor: ink,
@@ -25,14 +27,14 @@ class OrdersPage extends StatelessWidget {
         ),
       ),
       body: SafeArea(
-        child: orders.isEmpty
+        child: visibleOrders.isEmpty
             ? _emptyState()
             : ListView.separated(
                 padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
-                itemCount: orders.length,
-                separatorBuilder: (_, __) => const SizedBox(height: 12),
+                itemCount: visibleOrders.length,
+                separatorBuilder: (_, _) => const SizedBox(height: 12),
                 itemBuilder: (context, index) {
-                  final order = orders[index];
+                  final order = visibleOrders[index];
                   return InkWell(
                     borderRadius: BorderRadius.circular(22),
                     onTap: () => Navigator.push(
@@ -63,7 +65,10 @@ class OrdersPage extends StatelessWidget {
                               ),
                               const Spacer(),
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 5,
+                                ),
                                 decoration: BoxDecoration(
                                   color: mint.withValues(alpha: .12),
                                   borderRadius: BorderRadius.circular(999),
@@ -100,7 +105,11 @@ class OrdersPage extends StatelessWidget {
                           const SizedBox(height: 8),
                           Row(
                             children: [
-                              const Icon(Icons.chevron_right_rounded, color: muted, size: 16),
+                              const Icon(
+                                Icons.chevron_right_rounded,
+                                color: muted,
+                                size: 16,
+                              ),
                               const SizedBox(width: 6),
                               Text(
                                 _date(order.placedAt),
@@ -135,7 +144,11 @@ class OrdersPage extends StatelessWidget {
                 color: surface,
                 borderRadius: BorderRadius.circular(26),
               ),
-              child: const Icon(Icons.shopping_bag_outlined, size: 42, color: coral),
+              child: const Icon(
+                Icons.shopping_bag_outlined,
+                size: 42,
+                color: coral,
+              ),
             ),
             const SizedBox(height: 18),
             Text(
@@ -150,10 +163,7 @@ class OrdersPage extends StatelessWidget {
             Text(
               'Your checked-out items will appear here.',
               textAlign: TextAlign.center,
-              style: GoogleFonts.instrumentSans(
-                color: muted,
-                fontSize: 14,
-              ),
+              style: GoogleFonts.instrumentSans(color: muted, fontSize: 14),
             ),
           ],
         ),
@@ -164,7 +174,20 @@ class OrdersPage extends StatelessWidget {
   String _currency(double value) => '\$${value.toStringAsFixed(0)}';
 
   String _date(DateTime date) {
-    final month = <String>['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][date.month - 1];
+    final month = <String>[
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ][date.month - 1];
     return 'Placed ${date.day} $month ${date.year}';
   }
 }
@@ -214,7 +237,8 @@ class OrderDetailPage extends StatelessWidget {
               title: 'Items',
               child: Column(
                 children: order.items.map((item) {
-                  final itemTotal = _parsePrice(item.product.price) * item.quantity;
+                  final itemTotal =
+                      _parsePrice(item.product.price) * item.quantity;
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 12),
                     child: Row(
@@ -277,7 +301,12 @@ class OrderDetailPage extends StatelessWidget {
                   _infoRow('Shipping', 'Free', valueColor: mint),
                   _infoRow('Method', order.paymentMethod),
                   const Divider(color: surfaceElevated, height: 20),
-                  _infoRow('Total', _currency(order.total), valueColor: coral, bold: true),
+                  _infoRow(
+                    'Total',
+                    _currency(order.total),
+                    valueColor: coral,
+                    bold: true,
+                  ),
                 ],
               ),
             ),
@@ -324,7 +353,12 @@ class OrderDetailPage extends StatelessWidget {
     );
   }
 
-  Widget _infoRow(String label, String value, {Color valueColor = Colors.white, bool bold = false}) {
+  Widget _infoRow(
+    String label,
+    String value, {
+    Color valueColor = Colors.white,
+    bool bold = false,
+  }) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: Row(
@@ -355,7 +389,20 @@ class OrderDetailPage extends StatelessWidget {
   String _currency(double value) => '\$${value.toStringAsFixed(0)}';
 
   String _date(DateTime date) {
-    final month = <String>['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][date.month - 1];
+    final month = <String>[
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ][date.month - 1];
     return '${date.day} $month ${date.year}';
   }
 
